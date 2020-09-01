@@ -1,0 +1,73 @@
+{
+  "f272ea613d00cb82c03e7f941d2a1dc2" : {
+    "statistic" : {
+      "failed" : 0,
+      "broken" : 0,
+      "skipped" : 0,
+      "passed" : 8,
+      "unknown" : 0,
+      "total" : 8
+    },
+    "items" : [ {
+      "uid" : "ff243c7682cd41c5",
+      "status" : "passed",
+      "time" : {
+        "start" : 1598283528156,
+        "stop" : 1598283529249,
+        "duration" : 1093
+      }
+    }, {
+      "uid" : "c9bb34cebbf7a69b",
+      "status" : "passed",
+      "time" : {
+        "start" : 1598283528156,
+        "stop" : 1598283529249,
+        "duration" : 1093
+      }
+    }, {
+      "uid" : "afb083aaa0b62667",
+      "status" : "passed",
+      "time" : {
+        "start" : 1598283528156,
+        "stop" : 1598283529249,
+        "duration" : 1093
+      }
+    }, {
+      "uid" : "874652dd6d2527ce",
+      "status" : "passed",
+      "time" : {
+        "start" : 1598283528156,
+        "stop" : 1598283529249,
+        "duration" : 1093
+      }
+    }, {
+      "uid" : "96f4a8ded30f5f32",
+      "status" : "passed",
+      "time" : {
+        "start" : 1598283528156,
+        "stop" : 1598283529249,
+        "duration" : 1093
+      }
+    } ]
+  },
+  "e22114288005b13249800e51bf236112" : {
+    "statistic" : {
+      "failed" : 0,
+      "broken" : 1,
+      "skipped" : 0,
+      "passed" : 0,
+      "unknown" : 0,
+      "total" : 1
+    },
+    "items" : [ {
+      "uid" : "bbcb3b853002ee47",
+      "status" : "broken",
+      "statusDetails" : "element (\"#sidenav-people\") still not displayed after 2000ms",
+      "time" : {
+        "start" : 1597770024937,
+        "stop" : 1597770029580,
+        "duration" : 4643
+      }
+    } ]
+  }
+}

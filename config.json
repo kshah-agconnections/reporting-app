@@ -1,0 +1,6 @@
+{
+    "AppUsername" : "admin",
+    "AppPassword":"admin123",
+    "AddResultsXMLPath":"/v1/allure/addresults",
+    "RunAppOnPort":"8010"
+}
