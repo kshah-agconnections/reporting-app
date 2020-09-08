@@ -1,4 +1,4 @@
-module github.com/bhambri94/reporting-app
+module github.com/ksfshah3/reporting-app
 
 go 1.14
 

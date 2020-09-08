@@ -8,10 +8,12 @@ import (
 )
 
 type Configs struct {
-	AppUsername       string `json:"AppUsername"`
-	AppPassword       string `json:"AppPassword"`
-	AddResultsXMLPath string `json:"AddResultsXMLPath"`
-	RunAppOnPort      string `json:"RunAppOnPort"`
+	AppUsername          string `json:"AppUsername"`
+	AppPassword          string `json:"AppPassword"`
+	AddResultsXMLPath    string `json:"AddResultsXMLPath"`
+	DeleteResultsXMLPath string `json:"DeleteResultsXMLPath"`
+	RunAppOnPort         string `json:"RunAppOnPort"`
+	ProjectName          string `json:"ProjectName"`
 }
 
 var (

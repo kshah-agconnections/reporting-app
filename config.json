@@ -2,5 +2,7 @@
     "AppUsername" : "admin",
     "AppPassword":"admin123",
     "AddResultsXMLPath":"/v1/allure/addresults",
-    "RunAppOnPort":"8010"
+    "RunAppOnPort":"8010",
+    "DeleteResultsXMLPath":"/v1/allure/delete/results",
+    "ProjectName":"CropWise"
 }

@@ -2,8 +2,12 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
 	"os/exec"
+	"path/filepath"
+	"strings"
 
 	"github.com/ksfshah3/reporting-app/configs"
 	"github.com/buaazp/fasthttprouter"
@@ -28,6 +32,7 @@ func main() {
 	}
 
 	router.POST(configs.Configurations.AddResultsXMLPath+"/user=:userName/password=:password", addReportingResultsXML)
+	router.DELETE(configs.Configurations.DeleteResultsXMLPath+"/user=:userName/password=:password", deleteReportingResultsXML)
 
 	if err := h.ListenAndServe(":" + configs.Configurations.RunAppOnPort); err != nil {
 		log.Panicf("error in ListenAndServe: %s", err)
@@ -48,8 +53,9 @@ func addReportingResultsXML(ctx *fasthttp.RequestCtx) {
 		if err != nil {
 			sugar.Error(err)
 			ctx.Response.SetStatusCode(500)
-			successResponse := "{\"success\":false,\"response\":\"File key mentioned in request body is wrong\"}"
+			successResponse := "{\"success\":false,\"response\":\"Zip file of allure results file missing in Request Body\"}"
 			ctx.Write([]byte(successResponse))
+			return
 		}
 		if err := fasthttp.SaveMultipartFile(fh, "uploads/latestreport.tar.gz"); err != nil {
 			sugar.Error(err)
@@ -89,6 +95,19 @@ func addReportingResultsXML(ctx *fasthttp.RequestCtx) {
 			sugar.Info("Success! Allure generate new report")
 			sugar.Info(string(out))
 		}
+		data, err := ioutil.ReadFile("allure-report/index.html")
+		if err != nil {
+			sugar.Error("File not present", err)
+		} else {
+			indexHTML := string(data)
+			indexHTML = strings.Replace(indexHTML, "Allure Report", configs.Configurations.ProjectName, 1)
+			err = ioutil.WriteFile("allure-report/index.html", []byte(indexHTML), 0644)
+			if err != nil {
+				sugar.Error("File not present and Unable to write", err)
+			} else {
+				sugar.Info("Allure report Title Updated")
+			}
+		}
 		successResponse := "{\"success\":true,\"response\":\"Added results to Allure reporter\"}"
 		ctx.Write([]byte(successResponse))
 	} else {
@@ -96,5 +115,46 @@ func addReportingResultsXML(ctx *fasthttp.RequestCtx) {
 		successResponse := "{\"success\":false,\"response\":\"Unauthorized\"}"
 		ctx.Write([]byte(successResponse))
 	}
+}
 
+func deleteReportingResultsXML(ctx *fasthttp.RequestCtx) {
+	sugar.Infof("deleting xml allure report......")
+	ctx.Response.Header.Set("Content-Type", "application/json")
+	fmt.Println(string(ctx.Path()))
+
+	userName := ctx.UserValue("userName")
+	password := ctx.UserValue("password")
+	if userName == configs.Configurations.AppUsername && password == configs.Configurations.AppPassword {
+		ctx.Response.SetStatusCode(201)
+		RemoveContents("allure-report")
+		RemoveContents("allure-results")
+		successResponse := "{\"success\":true,\"response\":\"Existing Allure report is flushed\"}"
+		ctx.Write([]byte(successResponse))
+	} else {
+		ctx.Response.SetStatusCode(401)
+		successResponse := "{\"success\":false,\"response\":\"Unauthorized\"}"
+		ctx.Write([]byte(successResponse))
+	}
+}
+
+func RemoveContents(dir string) {
+	d, err := os.Open(dir)
+	if err != nil {
+		sugar.Error("Unable to find directory")
+		return
+	}
+	defer d.Close()
+	names, err := d.Readdirnames(-1)
+	if err != nil {
+		sugar.Error("Unable to find file names")
+		return
+	}
+	for _, name := range names {
+		err = os.RemoveAll(filepath.Join(dir, name))
+		if err != nil {
+			sugar.Error("Unable to Delete files")
+			return
+		}
+	}
+	sugar.Info("Folder files deleted " + dir)
 }
